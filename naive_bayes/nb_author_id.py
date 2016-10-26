@@ -15,19 +15,21 @@ from time import time
 sys.path.append("../tools/")
 from email_preprocess import preprocess
 
-
-### features_train and features_test are the features for the training
-### and testing datasets, respectively
-### labels_train and labels_test are the corresponding item labels
+# features_train and features_test are the features for the training
+# and testing datasets, respectively
+# labels_train and labels_test are the corresponding item labels
 features_train, features_test, labels_train, labels_test = preprocess()
 
+# your code goes here
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
 
-
-
-#########################################################
-### your code goes here ###
-
-
-#########################################################
-
+naive_bayes = GaussianNB()
+t = time()
+naive_bayes.fit(features_train, labels_train)
+print "Training Time: ", round(time()-t, 3), "s"
+t = time()
+labels_predicted = naive_bayes.predict(features_test)
+print "Prediction Time: ", round(time()-t, 3), "s"
+print "Accuracy Score: ", accuracy_score(labels_test, labels_predicted)
 
