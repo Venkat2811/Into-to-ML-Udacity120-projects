@@ -9,7 +9,7 @@
 """
     
 import sys
-from time import time
+import time
 sys.path.append("../tools/")
 from email_preprocess import preprocess
 
@@ -25,6 +25,7 @@ features_train, features_test, labels_train, labels_test = preprocess()
 # your code goes here
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
+from sklearn.externals import joblib
 
 # These lines effectively slice the training dataset down to 1% of its original size,
 # tossing out 99% of the training data
@@ -38,12 +39,17 @@ svc = None
 # svc = SVC(kernel='linear')
 # rbf
 svc = SVC(kernel='rbf', C=10000.0)
-t = time()
+t = time.time()
 svc.fit(features_train, labels_train)
-print "Training Time: ", round(time()-t, 3), "s"
-t = time()
+print "Training Time: ", round(time.time()-t, 3), "s"
+print "Saving Model.."
+file_name = 'finalized_model.sav'
+joblib.dump(svc, file_name)
+time.sleep(10)
+svc = joblib.load(file_name)
+t = time.time()
 labels_predicted = svc.predict(features_test)
-print "Prediction Time: ", round(time()-t, 3), "s"
+print "Prediction Time: ", round(time.time()-t, 3), "s"
 print "Accuracy Score: ", accuracy_score(labels_test, labels_predicted)
 print "Test 10 : ", svc.predict(features_test[10])
 print "Test 26 : ", svc.predict(features_test[26])
